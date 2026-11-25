@@ -1,0 +1,13 @@
+# Keep scripts runnable on the OS they are for, whatever the clone's autocrlf setting
+*.sh   text eol=lf
+*.cmd  text eol=crlf
+*.bat  text eol=crlf
+*.ps1  text eol=crlf
+*.mjs  text eol=lf
+*.ts   text eol=lf
+*.json text eol=lf
+# binary assets
+*.png  binary
+*.webp binary
+*.woff2 binary
+*.zip  binary

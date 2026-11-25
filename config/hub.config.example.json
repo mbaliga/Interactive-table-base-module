@@ -1,0 +1,23 @@
+{
+  "_readme": "Copy to config/hub.config.json (or hub.config.json next to the release) and edit. Every field is optional. Never put API keys here: see config/keys/README.txt.",
+  "port": 8080,
+  "advertiseHost": null,
+  "phoneUrl": null,
+  "qrNote": "Join the visitor Wi-Fi first",
+  "idleSeconds": 90,
+  "udp": { "port": 3333 },
+  "staleMs": 2000,
+  "offline": false,
+  "ui": {},
+  "proxies": {
+    "example": {
+      "base": "https://api.example.org/v1/",
+      "auth": { "header": "Authorization", "prefix": "Bearer " },
+      "allow": [
+        { "pattern": "items", "ttlSeconds": 3600 },
+        { "pattern": "items/[a-z0-9-]{1,40}", "ttlSeconds": 3600 }
+      ],
+      "timeoutMs": 8000
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "id": "interactive-table",
+  "name": "Interactive Table",
+  "version": "0.1.0",
+  "description": "Rename these three fields for each new table app (e.g. id: forts-table, name: Forts Table). The id names the release folder, the Windows tasks, the systemd unit and the kiosk profile."
+}

@@ -1,0 +1,56 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10.28.0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit and integration tests (real UDP/WebSocket/HTTP on localhost)
+        run: pnpm test
+      - name: Build release (table, phone, hub bundle) and zip it
+        run: pnpm package
+      - name: Smoke-test the built hub (HTTP, QR decode, proxy, traversal)
+        run: node scripts/smoke.mjs
+      - name: Parse the PowerShell scripts
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          foreach ($f in Get-ChildItem scripts/windows -Filter *.ps1) {
+            $errs = $null; $tokens = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile($f.FullName, [ref]$tokens, [ref]$errs)
+            if ($errs.Count) { $errs | ForEach-Object { Write-Error "$($f.Name):$($_.Extent.StartLineNumber): $($_.Message)" }; exit 1 }
+            Write-Host "parsed $($f.Name)"
+          }
+      - name: Shell syntax
+        if: runner.os == 'Linux'
+        run: for f in scripts/linux/*.sh; do bash -n "$f"; done
+      - uses: actions/upload-artifact@v4
+        with: { name: release-${{ matrix.os }}, path: release/*.zip }
+
+  browser-e2e:
+    name: browser e2e (ubuntu)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10.28.0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm e2e:all
