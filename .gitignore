@@ -1,0 +1,15 @@
+node_modules
+dist
+*.tsbuildinfo
+recordings/*.local.jsonl
+# secrets and generated output
+config/keys/*
+!config/keys/README.txt
+config/hub.config.json
+hub.config.json
+.env
+.env.*
+/release
+/dist
+/data
+/logs

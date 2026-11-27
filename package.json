@@ -1,0 +1,43 @@
+{
+  "name": "interactive-table-base",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "pnpm --filter \"./packages/*\" --filter \"./apps/*\" exec tsc --noEmit",
+    "dev": "pnpm --filter @itable/table dev",
+    "dev:phone": "pnpm --filter @itable/phone dev",
+    "hub": "pnpm --filter @itable/hub start",
+    "bridge": "pnpm --filter @itable/bridge start",
+    "sim": "pnpm --filter @itable/sim sim",
+    "build": "pnpm --filter @itable/table build && pnpm --filter @itable/phone build && node scripts/build-hub.mjs",
+    "package": "node scripts/package.mjs",
+    "kiosk": "node scripts/kiosk.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "new-app": "node scripts/new-app.mjs",
+    "e2e": "tsx tools/e2e/table.ts",
+    "e2e:tuio": "tsx tools/e2e/tuio.ts",
+    "e2e:qr": "tsx tools/e2e/qr-to-phone.ts",
+    "e2e:all": "pnpm e2e && pnpm e2e:tuio && pnpm e2e:qr"
+  },
+  "devDependencies": {
+    "@itable/bridge": "workspace:*",
+    "@itable/hub": "workspace:*",
+    "@itable/sim": "workspace:*",
+    "@types/node": "22.19.0",
+    "@types/pngjs": "6.0.5",
+    "esbuild": "0.28.2",
+    "fflate": "0.8.3",
+    "jsqr": "1.4.0",
+    "playwright": "1.65.1",
+    "pngjs": "7.0.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.1.0"
+  }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="icon" href="data:,">
+<title>Interactive Table</title>
+</head>
+<body>
+<div id="stage">
+  <canvas id="canvas"></canvas>
+  <div id="layer"></div>
+  <div id="dock" aria-label="Objects"></div>
+  <div id="hint">Drag an object onto the table</div>
+  <div id="tools">
+    <button id="bSnd" class="ib" aria-pressed="true" aria-label="Sound" title="Sound"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="on" d="M16.5 9a4 4 0 010 6M19 6.5a8 8 0 010 11"/><path class="off" d="M16 9l5 6M21 9l-5 6"/></svg></button>
+    <button id="bLog" class="ib" aria-pressed="false" aria-label="Show input" title="Show input"><svg viewBox="0 0 24 24"><path d="M4 7l5 5-5 5M12 18h8"/></svg></button>
+    <button id="bQr" class="ib" aria-label="Play on your phone" title="Play on your phone"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 18h2v2h-2zM14 18h2v2h-2zM18 14h2v2h-2z"/></svg></button>
+    <button id="bRst" class="ib" aria-label="Clear the table" title="Clear the table"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 108-8M4 4v5h5"/></svg></button>
+  </div>
+  <div id="log" class="off"></div>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

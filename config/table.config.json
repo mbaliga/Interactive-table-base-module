@@ -1,0 +1,22 @@
+{
+  "_note": "Hardware and puck setup for the table. Panel size, cids and the UDP port are PLACEHOLDERS until measured on the real table (see docs/HARDWARE.md). Defaults assume a 55-inch 16:9 panel.",
+  "panel": { "widthMm": 1218, "heightMm": 685, "widthPx": 3840, "heightPx": 2160 },
+  "transform": { "flipX": false, "flipY": false, "rotate": 0, "crop": { "x": 0, "y": 0, "w": 1, "h": 1 } },
+  "tracker": {
+    "removeHoldMs": 200,
+    "oneEuro": { "minCutoff": 1.5, "beta": 5, "dCutoff": 1.0 }
+  },
+  "link": {
+    "udpHost": "0.0.0.0", "udpPort": 3333,
+    "wsHost": "0.0.0.0", "wsPort": 8080,
+    "staleMs": 2000
+  },
+  "objects": [
+    { "cid": 0, "role": 0, "key": "spotlight", "label": "Spotlight", "rotation": { "meaning": "radius",  "min": 80, "max": 360, "detents": null } },
+    { "cid": 1, "role": 1, "key": "selector",  "label": "Selector",  "rotation": { "meaning": "option",  "min": 0,  "max": 2,   "detents": 3 } },
+    { "cid": 2, "role": 2, "key": "ripples",   "label": "Ripples",   "rotation": { "meaning": "speed",   "min": 0.2, "max": 3,  "detents": null } },
+    { "cid": 3, "role": 3, "key": "probe",     "label": "Probe",     "rotation": { "meaning": "heading", "min": 0,  "max": 360, "detents": null } },
+    { "cid": 4, "role": 4, "key": "pin-a",     "label": "Pin A",     "rotation": { "meaning": "size",    "min": 0,  "max": 1,   "detents": null } },
+    { "cid": 5, "role": 5, "key": "pin-b",     "label": "Pin B",     "rotation": { "meaning": "size",    "min": 0,  "max": 1,   "detents": null } }
+  ]
+}

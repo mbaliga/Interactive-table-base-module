@@ -1,0 +1,104 @@
+/* Table kit styles. One logical stage (default 1920 x 1080) scaled to fit the screen with --k; everything inside is in stage pixels.
+   Theme with the custom properties below (override them in your app's CSS). */
+:root {
+  --bg: #070b12;
+  --ink: #e8eef5;
+  --ink-dim: #93a3b5;
+  --panel: rgba(12, 20, 32, 0.82);
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #4fd6ff;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+  --k: 1;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #000; color: var(--ink); font-family: var(--font); }
+body { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+button { font: inherit; color: inherit; }
+
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform: translate(-50%, -50%) scale(var(--k)); transform-origin: 50% 50%; overflow: hidden; background: var(--bg); }
+#canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#layer { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+
+/* ---- pucks ---- */
+.pk { position: absolute; left: 0; top: 0; width: 0; height: 0; --a: var(--accent); transition: opacity 0.2s; }
+.pk .ring { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); pointer-events: none; transition: opacity 0.2s, transform 0.2s; }
+.pk .ring svg { display: block; overflow: visible; }
+.pk .rc { fill: none; stroke: var(--a); stroke-width: 3; opacity: 0.9; }
+.pk .tk line { stroke: var(--a); stroke-width: 2; opacity: 0.45; }
+.pk .opt { fill: var(--ink-dim); font: 600 17px var(--font); letter-spacing: 0.02em; }
+.pk .opt.sel { fill: var(--a); }
+.pk .knob .hit { fill: transparent; }
+.pk .knob .kh { fill: var(--a); stroke: var(--bg); stroke-width: 3; }
+.pk.docked .ring, .pk.docked .cap { opacity: 0; }
+.pk.docked .ring { transform: translate(-50%, -50%) scale(0.6); }
+.pk .cap { position: absolute; left: 0; top: 0; min-width: 160px; max-width: 360px; padding: 10px 14px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--a); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+.pk .cap.on { opacity: 1; }
+.pk .cap b { display: block; font-size: 15px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--a); }
+.pk .cap span { display: block; margin-top: 3px; font-size: 22px; line-height: 1.25; white-space: pre-line; }
+.pk .cap span:empty { display: none; }
+.pk .disc { position: absolute; left: -45px; top: -45px; width: 90px; height: 90px; border-radius: 50%; pointer-events: auto; cursor: grab; touch-action: none;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 60%), #121c2a; border: 3px solid var(--a); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55); }
+.pk .disc:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.pk .disc i { position: absolute; inset: 0; }
+.pk .disc i::before { content: ""; position: absolute; left: 50%; top: 8px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--a); }
+.pk.drag .disc { cursor: grabbing; transform: scale(1.06); }
+.pk .knob { pointer-events: auto; cursor: grab; }
+.pk.docked .knob { pointer-events: none; }
+/* TUIO: the real object sits on the screen, so the on-screen disc is only a faint marker and cannot be dragged */
+.tuio .pk .disc { pointer-events: none; background: transparent; box-shadow: none; border-style: dashed; opacity: 0.5; }
+.tuio .pk .knob { pointer-events: none; }
+.tuio .pk.docked { opacity: 0; }
+
+/* ---- dock (simulated mode) ---- */
+#dock { position: absolute; left: 0; right: 0; bottom: 0; height: 128px; z-index: 10; background: linear-gradient(transparent, rgba(0, 0, 0, 0.55)); border-top: 1px solid var(--line); }
+#dock .slot { position: absolute; top: 10px; width: 96px; height: 96px; margin-left: -48px; border-radius: 50%; border: 2px dashed rgba(255, 255, 255, 0.16); }
+#dock .slot span { position: absolute; left: 50%; bottom: -21px; transform: translateX(-50%); white-space: nowrap; font-size: 13px; color: var(--ink-dim); letter-spacing: 0.04em; }
+
+/* ---- hint, tools ---- */
+#hint { position: absolute; left: 50%; bottom: 150px; transform: translateX(-50%); padding: 10px 20px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-size: 20px; color: var(--ink-dim); transition: opacity 0.5s; pointer-events: none; }
+#hint.gone { opacity: 0; }
+.tuio #hint { bottom: 40px; }
+#tools { position: absolute; right: 24px; bottom: 24px; display: flex; gap: 10px; z-index: 50; }
+.ib { width: 52px; height: 52px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.ib svg { width: 26px; height: 26px; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#bQr svg { fill: var(--ink); stroke: none; }
+#bSnd[aria-pressed="true"] .off, #bSnd[aria-pressed="false"] .on { display: none; }
+#bLog[aria-pressed="true"] { border-color: var(--accent); }
+
+/* ---- dev input log ---- */
+#log { position: absolute; left: 24px; top: 24px; width: 520px; padding: 10px 14px; border-radius: 12px; background: rgba(0, 0, 0, 0.72); font: 13px/1.5 var(--mono); color: #b9c7d6; z-index: 60; pointer-events: none; }
+#log.off { display: none; }
+#log h5 { margin: 0 0 6px; font-size: 12px; letter-spacing: 0.08em; color: var(--accent); }
+#log .add { color: #7bf0b0; } #log .del { color: #ff8fa8; }
+
+/* ---- QR badge and dialog ---- */
+#qrbadge { position: absolute; left: 24px; bottom: 24px; z-index: 55; display: none; flex-direction: column; align-items: center; gap: 6px; padding: 10px 10px 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; }
+#qrbadge.on { display: flex; }
+#qrbadge .qbi { width: 112px; height: 112px; border-radius: 8px; overflow: hidden; background: #fff; }
+#qrbadge .qbi img { display: block; width: 100%; height: 100%; }
+#qrbadge .qbt { font-size: 14px; letter-spacing: 0.04em; color: var(--ink-dim); }
+#qr { position: absolute; inset: 0; z-index: 80; display: none; place-items: center; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+#qr.on { display: grid; }
+#qr .qc { position: relative; width: 460px; padding: 28px; border-radius: 22px; background: var(--panel); border: 1px solid var(--line); text-align: center; }
+#qr h3 { margin: 0 0 18px; font-size: 26px; font-weight: 600; }
+#qr .qimg { width: 300px; height: 300px; margin: 0 auto; border-radius: 12px; overflow: hidden; background: #fff; }
+#qr .qimg img { display: block; width: 100%; height: 100%; }
+#qr .qt { margin-top: 16px; display: grid; gap: 6px; }
+#qr .qt em { font-style: normal; font: 18px var(--mono); color: var(--ink); word-break: break-all; }
+#qr .qt i { font-style: normal; font-size: 16px; color: var(--ink-dim); }
+#qr .qt i:empty { display: none; }
+.tx { position: absolute; right: 14px; top: 14px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 18px; }
+
+/* ---- idle countdown and attract screen ---- */
+#idlecd { position: absolute; left: 50%; top: 32px; transform: translateX(-50%); z-index: 70; display: none; gap: 14px; align-items: baseline; padding: 12px 22px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-size: 20px; }
+#idlecd.on { display: flex; }
+#idlecd b { font-variant-numeric: tabular-nums; color: var(--accent); }
+#idlecd em { font-style: normal; color: var(--ink-dim); font-size: 17px; }
+#attract { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 65; display: none; flex-direction: column; align-items: center; gap: 12px; padding: 28px 44px; border-radius: 26px; background: var(--panel); border: 1px solid var(--line); text-align: center; pointer-events: none; animation: breathe 4s ease-in-out infinite; }
+#attract.on { display: flex; }
+#attract b { font-size: 44px; font-weight: 600; }
+#attract span { font-size: 22px; color: var(--ink-dim); }
+@keyframes breathe { 50% { transform: translate(-50%, -50%) scale(1.03); } }
+@media (prefers-reduced-motion: reduce) { #attract { animation: none; } .pk, .pk .ring, .pk .cap, #hint { transition: none; } }

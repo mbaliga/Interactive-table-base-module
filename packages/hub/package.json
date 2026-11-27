@@ -1,0 +1,21 @@
+{
+  "name": "@itable/hub",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@itable/bridge": "workspace:*",
+    "qrcode-generator": "2.0.4"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15",
+    "jsqr": "1.4.0",
+    "@itable/sim": "workspace:*",
+    "ws": "8.23.0",
+    "@types/ws": "8.18.2"
+  }
+}
